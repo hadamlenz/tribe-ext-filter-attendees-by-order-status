@@ -24,7 +24,6 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
     public $event = false;
     public $attendees = false;
 
-
     public function construct() {
 		$this->add_required_plugin( 'Tribe__Tickets__Main' );
 		$this->add_required_plugin( 'Tribe__Tickets_Plus__Main' );
@@ -59,15 +58,15 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
        if( "bottom" === $which ){
             //get all the statuses for all of the attendees
             //must remove the other filter or when filtered only that one status is returned here
-            remove_filter( 'tribe_tickets_event_attendees', array($this, 'tribe_tickets_event_attendees'), 20, 2 );
+            remove_filter( 'tribe_tickets_event_attendees', array( $this, 'tribe_tickets_event_attendees' ), 20, 2 );
             $this->attendees = Tribe__Tickets__Tickets::get_event_attendees( $this->event->ID );
-            add_filter( 'tribe_tickets_event_attendees', array($this, 'tribe_tickets_event_attendees'), 20, 2 );
+            add_filter( 'tribe_tickets_event_attendees', array( $this, 'tribe_tickets_event_attendees' ), 20, 2 );
 
             //make a unique array of the statuses
-            $status_array = $this->get_unique_order_status_labels($this->attendees);
+            $status_array = $this->get_unique_order_status_labels( $this->attendees );
 
             //die early if the array is empyt
-            if( empty($status_array) ){
+            if( empty( $status_array ) ){
                 return $nav;
             }
 
@@ -78,7 +77,7 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
             <option value="all">All Statuses</option>
                 <?php 
                 $format = '<option value="%s">%s</option>';
-                foreach($status_array as $k => $v ) {
+                foreach( $status_array as $k => $v ) {
                     echo sprintf(  $format, $k, $v );
                 }
                 ?>
@@ -93,8 +92,17 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
        return $nav; 
     }
 
+    /**
+    * Filter attendies based on $_REQUEST['tribe_attendees_order_status'].  Filter location: /event-tickets/src/Tribe/Tickets.php
+    *
+    * @param array $attendees The array of attendies
+    * @param string $event_id 
+    *
+    * @param array $attendees The filtered array of attendies
+    */
+
     public function tribe_tickets_event_attendees( $attendees, $event_id ){
-        if( isset($_REQUEST['tribe_attendees_order_status'] ) ){
+        if( isset( $_REQUEST['tribe_attendees_order_status'] ) ){
             $status = $_REQUEST['tribe_attendees_order_status'];
             $filtered_list = array();
             switch ( $status ) {
@@ -125,12 +133,11 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
     * Gets an array of unique statuses from the attendees
     *
     * @param array $attendees all the event attendees
-    *
     * @return array
     */
-    public function get_unique_order_status_labels($attendees){
+    public function get_unique_order_status_labels( $attendees ){
         $status_array = array();
-        foreach($attendees as $attendee){
+        foreach( $attendees as $attendee ){
             if( !in_array($attendee['order_status_label'], $status_array ) ) {
                 $key = $attendee['order_status'];
                 if(!$key){
@@ -141,5 +148,4 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
         }
         return $status_array;
     }
-    
 }
