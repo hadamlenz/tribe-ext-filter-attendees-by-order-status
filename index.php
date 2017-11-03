@@ -38,8 +38,8 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
         $this->tribe_data_api = new  Tribe__Tickets__Data_API();
     }
     /**
-	 * Extension initialization and hooks.
-	 */
+	* Extension initialization and hooks.
+	*/
 	public function init() {
 
         add_filter( 'tribe_events_tickets_attendees_table_nav', array($this, 'tribe_events_tickets_attendees_table_nav'), 10, 2);
@@ -53,7 +53,6 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
     * @param array $nav The array of items in the nav, where keys are the name of the item and values are the HTML of the buttons/inputs.
     * @param string $which Either 'top' or 'bottom'; the location of the current nav items being filtered.
     */
-
     public function tribe_events_tickets_attendees_table_nav( $nav, $which ){
        if( "bottom" === $which ){
             //get all the statuses for all of the attendees
@@ -100,7 +99,6 @@ class Tribe__Extension__Filter_Attendees_By_Order_Status extends Tribe__Extensio
     *
     * @param array $attendees The filtered array of attendies
     */
-
     public function tribe_tickets_event_attendees( $attendees, $event_id ){
         if( isset( $_REQUEST['tribe_attendees_order_status'] ) ){
             $status = $_REQUEST['tribe_attendees_order_status'];
